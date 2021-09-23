@@ -1,7 +1,9 @@
-import { Length, MaxLength } from "class-validator";
+import { Length, Max, MaxLength, Min } from "class-validator";
 import { ArgsType, Field, Float, InputType, Int } from "type-graphql";
-import Product, { Categories, Diets } from "../../entity/Product";
+import Product, { Categories, Diets, Review } from "../../entity/Product";
 import Restaurant from "../../entity/Restaurant";
+import { User } from '../../entity/User';
+import MinMax from './validators/MinMax';
 
 @InputType()
 class CreateProductInput implements Partial<Product> {
@@ -35,5 +37,21 @@ class ProductsArgs {
     maxPrice: number
 }
 
+@InputType()
+class CreateReviewInput implements Partial<Review> {
+    @Field(type => Int)
+    @MinMax(1)
+    rating: number;
 
-export { CreateProductInput, ProductsArgs };
+    @Field()
+    text: string;
+
+    @Field(type => User)
+    user: User;
+
+    @Field(type => Product)
+    product: Product;
+}
+
+
+export { CreateProductInput, ProductsArgs, CreateReviewInput };
