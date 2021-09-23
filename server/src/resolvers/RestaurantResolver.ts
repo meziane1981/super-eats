@@ -1,8 +1,9 @@
-import { Arg, Args, ArgsType, Field, FieldResolver, Mutation, Query, Resolver, ResolverInterface, Root } from 'type-graphql';
+import { Arg, Args, ArgsType, Ctx, Field, FieldResolver, Mutation, Query, Resolver, ResolverInterface, Root } from 'type-graphql';
 import { Like } from 'typeorm';
+import AppContext from '../@types/AppContext';
 import Restaurant from '../entity/Restaurant';
 import { User } from '../entity/User';
-import { RestaurantCreateInput } from './inputs/RestaurantArgs';
+import { RestaurantCreateInput } from './inputs/RestaurantInput';
 
 @Resolver(Restaurant)
 class RestaurantResolver implements ResolverInterface<Restaurant> {
@@ -26,18 +27,18 @@ class RestaurantResolver implements ResolverInterface<Restaurant> {
 
     @FieldResolver(() => Restaurant)
     async totalSales(@Root() parent: Restaurant): Promise<number> {
-        // Restaurant.count()
 
         return 0;
     }
 
     @Mutation(() => Restaurant)
     async createRestaurant(
-        @Arg('data') { name, userID }: RestaurantCreateInput
+        @Arg('data') { name }: RestaurantCreateInput,
+        @Ctx() context: AppContext
     ): Promise<Restaurant> {
         return Restaurant.create({
             name,
-            user: await User.findOne(userID)
+            user: await User.findOne(context.req.session.userID)
         }).save();
     }
 }

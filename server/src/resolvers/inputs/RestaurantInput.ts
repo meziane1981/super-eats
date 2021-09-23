@@ -6,8 +6,8 @@ class RestaurantCreateInput implements Partial<Restaurant> {
     @Field()
     name: string;
 
-    @Field()
-    userID: number;
+    // @Field()
+    // location: Location;
 }
 
 export { RestaurantCreateInput }
