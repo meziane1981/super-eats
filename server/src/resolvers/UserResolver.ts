@@ -40,7 +40,7 @@ class UserResolver {
 
         if (user) {
             if (bcrypt.compare(password, user.password)) {
-                context.req.session['userID'] = user.id;
+                context.req.session.userID = user.id;
                 return user;
             }
         }
