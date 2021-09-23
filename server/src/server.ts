@@ -10,6 +10,7 @@ import session from 'express-session';
 import ProductResolver from './resolvers/ProductResolver';
 import RestaurantResolver from './resolvers/RestaurantResolver';
 import UserResolver from './resolvers/UserResolver';
+import ReviewResolver from './resolvers/ReviewResolver';
 
 async function main() {
     await createConnection();
@@ -45,7 +46,7 @@ async function main() {
     app.use(session(sessionOptions));
 
     const schema = await buildSchema({
-        resolvers: [UserResolver,  RestaurantResolver, ProductResolver]
+        resolvers: [UserResolver,  RestaurantResolver, ProductResolver, ReviewResolver]
     });
 
     const apolloServer = new ApolloServer({
