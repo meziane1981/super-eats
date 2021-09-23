@@ -7,7 +7,8 @@ import {
   Link
 } from "react-router-dom";
 import Home from './pages/Home';
-import Order from './pages/Order';
+import Products from './pages/Products';
+import Restaurants from './pages/Restaurants';
 import Cart from './pages/Cart';
 
 function App() {
@@ -19,7 +20,10 @@ function App() {
             <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to="/order">Order</Link>
+            <Link to="/products">Products</Link>
+          </li>
+          <li>
+            <Link to="/restaurants">Restaurants</Link>
           </li>
           <li>
             <Link to="/cart">Cart</Link>
@@ -28,8 +32,11 @@ function App() {
       </nav>
 
       <Switch>
-        <Route path="/order">
-          <Order />
+        <Route path="/products">
+          <Products />
+        </Route>
+        <Route path="/restaurants">
+          <Restaurants />
         </Route>
         <Route path="/cart">
           <Cart />
