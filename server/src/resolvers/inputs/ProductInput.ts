@@ -30,11 +30,17 @@ class CreateProductInput implements Partial<Product> {
 
 @ArgsType()
 class ProductsArgs {
-    @Field(type => Float)
-    minPrice: number;
+    @Field(type => Float, { nullable: true })
+    minPrice?: number;
 
-    @Field(type => Float)
-    maxPrice: number
+    @Field(type => Float, { nullable: true })
+    maxPrice?: number;
+
+    @Field(type => Float, { nullable: true })
+    minRating?: number;
+
+    @Field(type => Float, { nullable: true })
+    maxRating?: number;
 }
 
 @InputType()
@@ -42,15 +48,13 @@ class CreateReviewInput implements Partial<Review> {
     @Field(type => Int)
     @MinMax(1)
     rating: number;
+    // rhgjphjfdg okgfbd kjopkf ,oerjpoezkfp^dskf zeoktkf >erpogksogkdskg eokfosdkgf
 
     @Field()
     text: string;
 
-    @Field(type => User)
-    user: User;
-
-    @Field(type => Product)
-    product: Product;
+    @Field(type => Int)
+    productID: number;
 }
 
 

@@ -1,29 +1,37 @@
 import { Arg, Args, ArgsType, FieldResolver, Float, Mutation, Query, Resolver, ResolverInterface, Root } from "type-graphql";
+import { Between, FindOperator, LessThan, Not } from 'typeorm';
 import Product, { Review } from "../entity/Product";
 import { CreateProductInput, ProductsArgs } from "./inputs/ProductInput";
 
 @Resolver(Product)
 class ProductResolver implements ResolverInterface<Product>{
     @Query(type => Product)
-    async product(@Arg('id') id: string): Promise<Product | null> {
+    async product(@Arg('id') id: number): Promise<Product | null> {
         return await Product.findOne(id);
     }
 
     // Required functionality: filtering, sorting
     @Query(type => [Product])
-    async products(@Args() args: ProductsArgs): Promise<Product[]> {
-        return Product.find();
-    }
+    async products(@Args() { minPrice, maxPrice, minRating, maxRating }: ProductsArgs): Promise<Product[]> {
+        let operations: Array<FindOperator<number>>;
 
-    @FieldResolver(type => Float)
-    async averageRating(@Root() parent: Product): Promise<number> {
-        let { avg } = await Review
-            .createQueryBuilder("review")
-            .select("AVG(review.rating)", "avg")
-            .where({product: parent})
-            .getRawOne();
+        // If one of these arguments was provided we want to filter by price
+        if (minPrice && maxPrice) {
+            operations.push(Between(minPrice, maxPrice));
+        } else if (minPrice || maxPrice) {
+            if (minPrice) {
+                operations.push(Not(LessThan(minPrice)));
+            } else {
+                operations.push(LessThan(maxPrice));
+            }
+        }
         
-        return avg;
+        // return Product
+        //     .createQueryBuilder('product')
+        //     .where(operations.reduce)
+        //     .getQuery();
+
+        return Product.find();
     }
 
     @Mutation(type => Product)
@@ -41,6 +49,30 @@ class ProductResolver implements ResolverInterface<Product>{
             .map(async product => product.save());
 
         return Promise.all(promises);
+    }
+    
+    @FieldResolver(type => Float)
+    async averageRating(@Root() parent: Product): Promise<number> {
+        let { avg } = await Review
+            .createQueryBuilder("review")
+            .select("AVG(review.rating)", "avg")
+            .where({
+                product: parent
+            })
+            .getRawOne();
+        
+        return avg;
+    }
+
+    @FieldResolver(type => [Review])
+    async reviews(
+        @Root() parent: Product
+    ): Promise<Review[]> {
+        return Review.find({
+            where: { 
+                product: parent
+            }
+        });
     }
 }
 

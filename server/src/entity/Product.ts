@@ -72,10 +72,14 @@ class Product extends BaseEntity {
     @ManyToOne(type => Restaurant, restaurant => restaurant.products)
     seller: Restaurant;
 
+    @Field(type => [Review])
+    reviews: Review[]
+
     @Field(type => Float)
     averageRating: number;
 }
 
+@ObjectType()
 @Entity()
 class Review extends BaseEntity {
     @Field(type => ID)
