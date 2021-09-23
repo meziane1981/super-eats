@@ -11,16 +11,16 @@ class RestaurantResolver implements ResolverInterface<Restaurant> {
         return await Restaurant.findOne(id);
     }
 
-    @Query(() => Restaurant)
+    @Query(() => [Restaurant])
     async restaurants(
         @Arg('nameContains', { nullable: true }) nameContains?: string
-        ): Promise<Restaurant[]> {
+        ): Promise<Restaurant[] | null> {
         if (nameContains !== null) {
-            return await Restaurant.find({
+            return Restaurant.find({
                 name: Like(`%${nameContains}%`)
             });
         } else {
-            return await Restaurant.find();
+            return Restaurant.find();
         }
     }
 
@@ -35,7 +35,7 @@ class RestaurantResolver implements ResolverInterface<Restaurant> {
     async createRestaurant(
         @Arg('data') { name, userID }: RestaurantCreateInput
     ): Promise<Restaurant> {
-        return await Restaurant.create({
+        return Restaurant.create({
             name,
             user: await User.findOne(userID)
         }).save();
