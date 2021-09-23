@@ -1,7 +1,8 @@
-import { Arg, Args, Mutation, Query, Resolver, ResolverInterface } from 'type-graphql';
+import { Arg, Args, Ctx, Mutation, Query, Resolver, ResolverInterface } from 'type-graphql';
 import bcrypt from 'bcrypt';
 import { User } from '../entity/User';
 import { CreateUserInput, LoginInput } from './inputs/UserInput';
+import AppContext from '../@types/AppContext';
 
 @Resolver(User)
 class UserResolver {
@@ -31,14 +32,28 @@ class UserResolver {
     }
     
     @Mutation(() => User)
-    async login(@Arg('data') { email, password }: LoginInput): Promise<User | null> {
+    async login(
+        @Arg('data') { email, password }: LoginInput,
+        @Ctx() context: AppContext
+    ): Promise<User | null> {
         const user = await User.findOne({where: {email}});
 
         if (user) {
-            
-        } else {
-            return null
+            if (bcrypt.compare(password, user.password)) {
+                context.req.session['userID'] = user.id;
+                return user;
+            }
         }
+        return null
+    }
+
+    @Mutation(() => Boolean)
+    async logout(@Ctx() context: AppContext): Promise<boolean> {
+        context.req.session.destroy((err) => {
+            if(err) console.error(err);
+        });
+
+        return true;
     }
 }
 
