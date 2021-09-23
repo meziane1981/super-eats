@@ -12,7 +12,7 @@ class ProductResolver implements ResolverInterface<Product>{
     // Required functionality: filtering, sorting
     @Query(type => [Product])
     async products(@Args() args: ProductsArgs): Promise<Product[]> {
-        return await Product.find();
+        return Product.find();
     }
 
     @FieldResolver(type => Float)
@@ -20,24 +20,27 @@ class ProductResolver implements ResolverInterface<Product>{
         let { avg } = await Review
             .createQueryBuilder("review")
             .select("AVG(review.rating)", "avg")
+            .where({product: parent})
             .getRawOne();
-
+        
         return avg;
     }
 
     @Mutation(type => Product)
     async createProduct(@Arg('data') data: CreateProductInput): Promise<Product> {
-        return await Product.create({...data}).save();
+        return Product.create(data).save();
     }
 
     @Mutation(type => [Product])
-    async createProducts(@Arg('data', type => [CreateProductInput]) data: CreateProductInput[]): Promise<Product[]> {
-        const products = Product.create({...data});
-        const promises = products.map(async (product) => {
-            return await product.save()
-        })
+    async createProducts(
+        @Arg('data', type => [CreateProductInput])
+            data: CreateProductInput[]
+    ): Promise<Product[]> {
+        const promises = Product
+            .create(data)
+            .map(async product => product.save());
 
-        return await Promise.all(promises);
+        return Promise.all(promises);
     }
 }
 
