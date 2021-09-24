@@ -3,7 +3,7 @@ import { ArgsType, Field, Float, InputType, Int } from "type-graphql";
 import Product, { Categories, Diets, Review } from "../../entity/Product";
 import Restaurant from "../../entity/Restaurant";
 import { User } from '../../entity/User';
-import MinMax from './validators/MinMax';
+import MinMax from '../validators/MinMax';
 
 @InputType()
 class CreateProductInput implements Partial<Product> {
@@ -43,19 +43,4 @@ class ProductsArgs {
     maxRating?: number;
 }
 
-@InputType()
-class CreateReviewInput implements Partial<Review> {
-    @Field(type => Int)
-    @MinMax(1)
-    rating: number;
-    // rhgjphjfdg okgfbd kjopkf ,oerjpoezkfp^dskf zeoktkf >erpogksogkdskg eokfosdkgf
-
-    @Field()
-    text: string;
-
-    @Field(type => Int)
-    productID: number;
-}
-
-
-export { CreateProductInput, ProductsArgs, CreateReviewInput };
+export { CreateProductInput, ProductsArgs };

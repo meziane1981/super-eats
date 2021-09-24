@@ -1,8 +1,8 @@
 import { Arg, Ctx, FieldResolver, Mutation, Query, Resolver, ResolverInterface, Root } from 'type-graphql';
-import AppContext from '../@types/AppContext';
-import Product, { Review } from '../entity/Product';
-import { User } from '../entity/User';
-import { CreateReviewInput } from './inputs/ProductInput';
+import AppContext from '../../@types/AppContext';
+import Product, { Review } from '../../entity/Product';
+import { User } from '../../entity/User';
+import { CreateReviewInput } from './inputs';
 
 @Resolver(Review)
 class ReviewResolver implements ResolverInterface<Review> {

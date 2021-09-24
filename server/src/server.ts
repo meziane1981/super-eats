@@ -7,10 +7,7 @@ import { buildSchema } from 'type-graphql';
 import { createConnection } from "typeorm";
 import cors from "cors";
 import session from 'express-session';
-import ProductResolver from './resolvers/ProductResolver';
-import RestaurantResolver from './resolvers/RestaurantResolver';
-import UserResolver from './resolvers/UserResolver';
-import ReviewResolver from './resolvers/ReviewResolver';
+import { ProductResolver, RestaurantResolver, UserResolver, ReviewResolver } from './resolvers';
 
 async function main() {
     await createConnection();
@@ -21,8 +18,8 @@ async function main() {
     const corsOptions = {
         credentials: true,
         origin: [
-            'http://localhost:3000',
-            'https://studio.apollographql.com'
+            "http://localhost:3000",
+            "https://studio.apollographql.com"
         ]
     };
 

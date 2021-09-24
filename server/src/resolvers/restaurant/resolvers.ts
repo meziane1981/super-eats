@@ -1,9 +1,9 @@
 import { Arg, Args, ArgsType, Ctx, Field, FieldResolver, Mutation, Query, Resolver, ResolverInterface, Root } from 'type-graphql';
 import { Like } from 'typeorm';
-import AppContext from '../@types/AppContext';
-import Restaurant from '../entity/Restaurant';
-import { User } from '../entity/User';
-import { RestaurantCreateInput } from './inputs/RestaurantInput';
+import AppContext from '../../@types/AppContext';
+import Restaurant from '../../entity/Restaurant';
+import { User } from '../../entity/User';
+import { RestaurantCreateInput } from './inputs';
 
 @Resolver(Restaurant)
 class RestaurantResolver implements ResolverInterface<Restaurant> {

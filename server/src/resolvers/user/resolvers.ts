@@ -1,8 +1,8 @@
 import { Arg, Args, Ctx, Mutation, Query, Resolver, ResolverInterface } from 'type-graphql';
 import bcrypt from 'bcrypt';
-import { User } from '../entity/User';
-import { CreateUserInput, LoginInput } from './inputs/UserInput';
-import AppContext from '../@types/AppContext';
+import { User } from '../../entity/User';
+import { CreateUserInput, LoginInput } from './inputs';
+import AppContext from '../../@types/AppContext';
 
 @Resolver(User)
 class UserResolver {
