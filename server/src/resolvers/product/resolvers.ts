@@ -1,8 +1,19 @@
-import { Arg, Args, ArgsType, FieldResolver, Float, Mutation, Query, Resolver, ResolverInterface, Root } from "type-graphql";
-import { Between, FindOperator, LessThan, Not } from 'typeorm';
+import { Arg, Args, ArgsType, FieldResolver, Float, InputType, Mutation, Query, registerEnumType, Resolver, ResolverInterface, Root } from "type-graphql";
 import Product, { Review } from "../../entity/Product";
 import { CreateProductInput, ProductsArgs } from "./inputs";
 import { PaginationArgs } from '../inputs';
+
+
+enum ProductOrder {
+    Popularity,
+    Rating,
+    Price
+}
+
+registerEnumType(ProductOrder, {
+    name: 'ProductOrder',
+    description: ''
+})
 
 @Resolver(Product)
 class ProductResolver implements ResolverInterface<Product>{
@@ -15,37 +26,18 @@ class ProductResolver implements ResolverInterface<Product>{
     @Query(type => [Product])
     async products(
         @Args() { skip, take }: PaginationArgs,
-        // @Args() { minPrice, maxPrice, minRating, maxRating }: ProductsArgs
+        @Arg('orderBy', { nullable: true }) orderBy: ProductOrder
     ): Promise<Product[]> {
-        // let conditions: Array<{[column: string]: FindOperator<number>}>;
-        let conditions: Map<string, FindOperator<number>>;
+        let query = Product.createQueryBuilder();
 
-        // If one of these arguments was provided we want to filter by price
-        // if (minPrice && maxPrice) {
-        //     operations.push(Between(minPrice, maxPrice));
-        // } else if (minPrice || maxPrice) {
-        //     if (minPrice) {
-        //         operations.push(Not(LessThan(minPrice)));
-        //     } else {
-        //         operations.push(LessThan(maxPrice));
-        //     }
-        // }
-        
-        // let a: any;
-        // if (minPrice || maxPrice) {
-        //     let min = minPrice ?? 0;
-        //     let max = maxPrice ?? 10000;
+        if (skip) {
+            query.skip(skip)
+        }
+        if (take) {
+            query.take(take)
+        }
 
-        //    let a;
-        //    a.push({ price: Between(min, max) });
-        // }
-        
-        // return Product
-        //     .createQueryBuilder('product')
-        //     .where(operations.reduce)
-        //     .getQuery();
-
-        return Product.find({ skip, take });
+        return query.getMany();
     }
 
     @Mutation(type => Product)
