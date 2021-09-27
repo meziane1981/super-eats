@@ -12,10 +12,10 @@ registerEnumType(Order, {
 
 @ArgsType()
 class PaginationArgs {
-    @Field(type => Int)
+    @Field(type => Int, { nullable: true })
     skip?: number;
 
-    @Field(type => Int)
+    @Field(type => Int, { nullable: true })
     take?: number;
 }
 
