@@ -16,7 +16,7 @@ class RestaurantResolver implements ResolverInterface<Restaurant> {
     async restaurants(
         @Arg('nameContains', { nullable: true }) nameContains?: string
         ): Promise<Restaurant[] | null> {
-        if (nameContains !== null) {
+        if (nameContains) {
             return Restaurant.find({
                 name: Like(`%${nameContains}%`)
             });
