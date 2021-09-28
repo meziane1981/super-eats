@@ -25,6 +25,7 @@ class Restaurant extends BaseEntity {
     @Field(() => Int)
     totalSales: number;
 
+    @Field(() => [Product])
     @OneToMany(() => Product, (product) => product.seller)
     products: Product[];
 

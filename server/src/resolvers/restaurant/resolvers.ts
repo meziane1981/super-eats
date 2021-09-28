@@ -1,6 +1,7 @@
 import { Arg, Args, ArgsType, Ctx, Field, FieldResolver, Mutation, Query, Resolver, ResolverInterface, Root } from 'type-graphql';
 import { Like } from 'typeorm';
 import AppContext from '../../@types/AppContext';
+import Product from '../../entity/Product';
 import Restaurant from '../../entity/Restaurant';
 import { User } from '../../entity/User';
 import { RestaurantCreateInput } from './inputs';
@@ -14,7 +15,7 @@ class RestaurantResolver implements ResolverInterface<Restaurant> {
 
     @Query(() => [Restaurant])
     async restaurants(
-        @Arg('nameContains', { nullable: true }) nameContains?: string
+        @Arg('nameContains', { nullable: true }) nameContains: string
         ): Promise<Restaurant[] | null> {
         if (nameContains) {
             return Restaurant.find({
@@ -27,8 +28,12 @@ class RestaurantResolver implements ResolverInterface<Restaurant> {
 
     @FieldResolver(() => Restaurant)
     async totalSales(@Root() parent: Restaurant): Promise<number> {
-
         return 0;
+    }
+
+    @FieldResolver(type => [Product])
+    async products(@Root() parent: Restaurant): Promise<Product[]> {
+        return Product.find({where: {seller: parent}, relations: ['seller']});
     }
 
     @Mutation(() => Restaurant)
