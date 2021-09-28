@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './User';
 import Restaurant from './Restaurant';
 import { Field, Float, ID, Int, ObjectType, registerEnumType } from 'type-graphql';
@@ -73,7 +73,8 @@ class Product extends BaseEntity {
     seller: Restaurant;
 
     @Field(type => [Review])
-    reviews: Review[]
+    @OneToMany(type => Review, reviews => reviews.product)
+    reviews: Review[];
 
     @Field(type => Float)
     averageRating: number;
@@ -99,7 +100,7 @@ class Review extends BaseEntity {
     user: User;
 
     @Field(type => Product)
-    @ManyToOne(type => Product)
+    @ManyToOne(type => Product, product => product.reviews)
     product: Product;
 }
 

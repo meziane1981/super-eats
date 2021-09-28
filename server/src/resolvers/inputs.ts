@@ -1,8 +1,8 @@
-import { ArgsType, Field, InputType, Int, registerEnumType } from 'type-graphql';
+import { ArgsType, Field, Int, registerEnumType } from 'type-graphql';
 
 enum Order {
-    Asc,
-    Desc
+    Asc = 'ASC',
+    Desc = 'DESC'
 }
 
 registerEnumType(Order, {
@@ -19,10 +19,4 @@ class PaginationArgs {
     take?: number;
 }
 
-@ArgsType()
-class OrderArgs {
-    field: string;
-    order: Order;
-}
-
-export { PaginationArgs, OrderArgs };
+export { PaginationArgs, Order };

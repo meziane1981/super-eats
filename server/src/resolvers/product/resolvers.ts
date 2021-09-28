@@ -1,8 +1,7 @@
 import { Arg, Args, ArgsType, FieldResolver, Float, InputType, Mutation, Query, registerEnumType, Resolver, ResolverInterface, Root } from "type-graphql";
 import Product, { Review } from "../../entity/Product";
 import { CreateProductInput, ProductsArgs } from "./inputs";
-import { PaginationArgs } from '../inputs';
-
+import { PaginationArgs, Order } from '../inputs';
 
 enum ProductOrder {
     Popularity,
@@ -15,6 +14,13 @@ registerEnumType(ProductOrder, {
     description: ''
 })
 
+// @InputType()
+// class Order {
+//     order: ProductOrder;
+//     direction: 'ASC' | 'DESC';
+// }
+
+
 @Resolver(Product)
 class ProductResolver implements ResolverInterface<Product>{
     @Query(type => Product)
@@ -25,19 +31,47 @@ class ProductResolver implements ResolverInterface<Product>{
     // Required functionality: pagination, filtering, sorting
     @Query(type => [Product])
     async products(
-        @Args() { skip, take }: PaginationArgs,
-        @Arg('orderBy', { nullable: true }) orderBy: ProductOrder
+        @Args()
+        { skip, take }: PaginationArgs,
+        @Arg('orderBy', type => ProductOrder, { nullable: true, defaultValue: ProductOrder.Rating })
+        orderBy: ProductOrder,
+        @Arg('direction', type => Order, { defaultValue: Order.Asc })
+        direction: Order
+
     ): Promise<Product[]> {
-        let query = Product.createQueryBuilder();
+        const queryBuilder = Product
+            .createQueryBuilder('product')
+            .select('product.*')
 
-        if (skip) {
-            query.skip(skip)
+        switch (orderBy) {
+            case ProductOrder.Popularity:
+                return queryBuilder.getRawMany();
+                break;
+
+            case ProductOrder.Price:
+                queryBuilder
+                    .orderBy('price', direction)    
+                break;
+        
+            case ProductOrder.Rating:
+                queryBuilder
+                    .addSelect('AVG(review.rating)', 'avg')
+                    .leftJoin('product.reviews', 'review')
+                    .orderBy('avg', direction)
+                break;
         }
+        
         if (take) {
-            query.take(take)
+            queryBuilder.take(take);
         }
-
-        return query.getMany();
+        
+        if (skip) {
+            queryBuilder.skip(skip);
+        }
+        
+        return queryBuilder
+            .groupBy('product.id')
+            .getRawMany();
     }
 
     @Mutation(type => Product)
@@ -67,7 +101,7 @@ class ProductResolver implements ResolverInterface<Product>{
             })
             .getRawOne();
         
-        return avg;
+        return avg ?? 0;
     }
 
     @FieldResolver(type => [Review])
