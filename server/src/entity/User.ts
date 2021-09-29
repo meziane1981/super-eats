@@ -1,8 +1,6 @@
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
-import { IsEmail, Length } from 'class-validator'
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 import { Field, ID, ObjectType, registerEnumType } from 'type-graphql'
 
-// Important to remember that if a value is inserted anywhere other than at the end all user permissions will change
 enum UserRole {
     User = 'user',
     Seller = 'seller',
@@ -55,6 +53,7 @@ class User extends BaseEntity {
     })
     lastConnection?: Date;
 
+    @Field()
     @Column({
         type: 'enum',
         enum: UserRole,

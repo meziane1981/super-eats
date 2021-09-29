@@ -1,13 +1,28 @@
-import { Arg, Args, Ctx, Mutation, Query, Resolver, ResolverInterface } from 'type-graphql';
+import { Arg, Ctx, Mutation, Query, Resolver, ResolverInterface, UseMiddleware } from 'type-graphql';
 import bcrypt from 'bcrypt';
-import { User } from '../../entity/User';
+import { User, UserRole } from '../../entity/User';
 import { CreateUserInput, LoginInput } from './inputs';
 import AppContext from '../../@types/AppContext';
+import { authorization } from '../middleware';
 
 @Resolver(User)
 class UserResolver {
+    
     @Query(() => User)
-    async user() {
+    @UseMiddleware(authorization((args, context) => {
+        const {userID, userRole} = context.req.session;
+        return userID === args.id || userRole === UserRole.Admin
+    }))
+    async user(@Arg('id') id: number) {
+        return User.findOne(id);
+    }
+
+    @Query(type => [User])
+    @UseMiddleware(authorization((args, context) => {
+        const {userID, userRole} = context.req.session;
+        return userRole === UserRole.Admin
+    }))
+    async users() {
         return User.find()
     }
 
@@ -15,20 +30,14 @@ class UserResolver {
     async createUser(@Arg('data') { email, password, firstName, lastName }: CreateUserInput) {
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const user1 = User.create({
+        const user = User.create({
             email,
             password: hashedPassword,
             firstName,
             lastName
         });
-        
-        console.log(user1);
-        
-        const user2 = user1.save();
 
-        console.log(user2);
-
-        return user2;
+        return user.save();
     }
     
     @Mutation(() => User)
@@ -39,13 +48,14 @@ class UserResolver {
         const user = await User.findOne({where: {email}});
 
         if (user) {
-            if (bcrypt.compare(password, user.password)) {
+            if (await bcrypt.compare(password, user.password)) {
+                
                 context.req.session.userID = user.id;
                 return user;
             }
         }
         return null
-    }
+    }   
 
     @Mutation(() => Boolean)
     async logout(@Ctx() context: AppContext): Promise<boolean> {

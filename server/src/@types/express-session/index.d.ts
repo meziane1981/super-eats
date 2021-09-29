@@ -1,8 +1,9 @@
 import session from 'express-session';
-import { User } from '../../entity/User';
+import { User, UserRole } from '../../entity/User';
 
 declare module 'express-session' {
     export interface SessionData {
         userID: number
+        userRole: UserRole
     }
 }
