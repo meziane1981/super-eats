@@ -4,6 +4,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+<<<<<<< HEAD
   },
   "devDependencies": {
     "@types/react": "^17.0.27",
@@ -18,5 +19,7 @@
   "dependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
+=======
+>>>>>>> 384f968496c3e3d410546b32dedbf9fce223166c
   }
 }
