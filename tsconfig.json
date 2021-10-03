@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        // Projects
+        "incremental": true,
+        "composite": true,
+        // Modules
+        "moduleResolution": "node",
+        // Emit
+        "declaration": true,
+        "sourceMap": true,
+        // Interop Constraints
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        // Type Checking
+        // "strict": true,
+        "noFallthroughCasesInSwitch": true,
+    }
+}

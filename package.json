@@ -1,0 +1,22 @@
+{
+  "name": "super-eats",
+  "version": "1.0.0",
+  "description": "welcome to decorator hell",
+  "workspaces":[
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/henryfranceschi/super-eats.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/henryfranceschi/super-eats/issues"
+  },
+  "homepage": "https://github.com/henryfranceschi/super-eats#readme"
+}

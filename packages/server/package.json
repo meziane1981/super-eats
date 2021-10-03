@@ -1,8 +1,7 @@
 {
-  "name": "new-app-server",
+  "name": "@super-eats/server",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "main": "dist/index.js",
   "scripts": {
     "start": "nodemon -r dotenv/config --exec ts-node ./src/server.ts",
     "compile": "npx tsc"
