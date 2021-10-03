@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    // Language and Environment
+    "target": "esnext",
+    "lib": ["esnext", "esnext.asynciterable"],
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    // Modules
+    "module": "commonjs",
+    "rootDir": "src",
+    "typeRoots": ["src/@types"],
+    // Emit
+    "outDir": "dist",
+  }
+}
