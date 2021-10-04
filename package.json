@@ -6,7 +6,9 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build-all": "npm -w @super-eats/server run build; npm -w @super-eats/client run build",
+    "start-server": "npm -w @super-eats/server start",
+    "start-client": "npm -w @super-eats/client start"
   },
   "repository": {
     "type": "git",

@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
-    "start": "nodemon -r dotenv/config --exec ts-node ./src/server.ts",
-    "compile": "npx tsc"
+    "start": "nodemon -r dotenv/config --exec ts-node ./src/index.ts",
+    "build": "npx tsc"
   },
   "keywords": [],
   "author": "",
