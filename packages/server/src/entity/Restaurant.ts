@@ -14,7 +14,7 @@ import { User } from "./User";
 @ObjectType()
 @Entity()
 class Restaurant extends BaseEntity {
-    @Field(type => ID)
+    @Field(() => ID)
     @PrimaryGeneratedColumn()
     id: number;
 

@@ -36,7 +36,7 @@ registerEnumType(Categories, {
 @ObjectType()
 @Entity()
 class Product extends BaseEntity {
-    @Field(type => ID)
+    @Field(() => ID)
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -48,11 +48,11 @@ class Product extends BaseEntity {
     @Column({ length: 64, nullable: true})
     description?: string;
 
-    @Field(type => Float)
+    @Field(() => Float)
     @Column('float')
     price: number;
 
-    @Field(type => Categories)
+    @Field(() => Categories)
     @Column({
         type: 'enum',
         enum: Categories,
@@ -60,7 +60,7 @@ class Product extends BaseEntity {
     })
     category: Categories;
 
-    @Field(type => Diets)
+    @Field(() => Diets)
     @Column({
         type: 'enum',
         enum: Diets,
@@ -68,26 +68,26 @@ class Product extends BaseEntity {
     })
     diet: Diets;
 
-    @Field(type => Restaurant)
-    @ManyToOne(type => Restaurant, restaurant => restaurant.products)
+    @Field(() => Restaurant)
+    @ManyToOne(() => Restaurant, restaurant => restaurant.products)
     seller: Restaurant;
 
-    @Field(type => [Review])
-    @OneToMany(type => Review, reviews => reviews.product)
+    @Field(() => [Review])
+    @OneToMany(() => Review, reviews => reviews.product)
     reviews: Review[];
 
-    @Field(type => Float)
+    @Field(() => Float)
     averageRating: number;
 }
 
 @ObjectType()
 @Entity()
 class Review extends BaseEntity {
-    @Field(type => ID)
+    @Field(() => ID)
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Field(type => Int)
+    @Field(() => Int)
     @Column()
     rating: number;
 
@@ -95,12 +95,12 @@ class Review extends BaseEntity {
     @Column({ length: 1024, nullable: true })
     text: string;
 
-    @Field(type => User)
-    @ManyToOne(type => User)
+    @Field(() => User)
+    @ManyToOne(() => User)
     user: User;
 
-    @Field(type => Product)
-    @ManyToOne(type => Product, product => product.reviews)
+    @Field(() => Product)
+    @ManyToOne(() => Product, product => product.reviews)
     product: Product;
 }
 

@@ -1,4 +1,4 @@
-import { Arg, Args, ArgsType, Ctx, Field, FieldResolver, Mutation, Query, Resolver, ResolverInterface, Root } from 'type-graphql';
+import { Arg, Ctx, FieldResolver, Mutation, Query, Resolver, ResolverInterface, Root } from 'type-graphql';
 import { Like } from 'typeorm';
 import AppContext from '../../@types/AppContext';
 import Product from '../../entity/Product';
@@ -26,12 +26,12 @@ class RestaurantResolver implements ResolverInterface<Restaurant> {
         }
     }
 
-    @FieldResolver(() => Restaurant)
-    async totalSales(@Root() parent: Restaurant): Promise<number> {
-        return 0;
-    }
+    // @FieldResolver(() => Restaurant)
+    // async totalSales(@Root() parent: Restaurant): Promise<number> {
+    //     return 0;
+    // }
 
-    @FieldResolver(type => [Product])
+    @FieldResolver(() => [Product])
     async products(@Root() parent: Restaurant): Promise<Product[]> {
         return Product.find({where: {seller: parent}, relations: ['seller']});
     }

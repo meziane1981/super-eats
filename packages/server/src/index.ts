@@ -25,7 +25,7 @@ async function main() {
 
     const sessionOptions = {
         store: new RedisStore({
-            client: redis as any,
+            client: redis,
         }),
         name: "sid",
         secret: '8989dbbb7dfd3906b2ba480a5ec9e3927e47572a7908f29f75aa14b9d60d14557f97f4ea202e4f62d8eebfc63e96a562a51f844832b2aeeeedf28a98f168b88a',
@@ -34,7 +34,7 @@ async function main() {
         cookie: {
             httpOnly: true,
             sameSite: true,
-            secure: process.env.NODE_ENV  == 'production',
+            secure: process.env.NODE_ENV  === 'production',
             maxAge: 30 * 60 * 1000 // 30 minutes
         }
     };
@@ -48,6 +48,7 @@ async function main() {
 
     const apolloServer = new ApolloServer({
         schema,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
         context: ({req}: any) => ({req})
     });
     await apolloServer.start();

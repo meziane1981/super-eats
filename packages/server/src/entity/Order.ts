@@ -1,15 +1,5 @@
-import {
-    Column,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    OneToMany,
-    OneToOne,
-    PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, Entity } from "typeorm";
 import { Field, ObjectType } from "type-graphql";
-import { Product } from "./Product";
-import { User } from "./User";
 import { Cart } from "./Cart";
 
 @ObjectType()
@@ -19,3 +9,5 @@ class Order extends Cart{
     @Column({type: "timestamptz"})
     orderDate: Date
 }
+
+export default Order;
