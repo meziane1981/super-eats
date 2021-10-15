@@ -1,4 +1,4 @@
-import { IsEmail, Length, MaxLength, maxLength, Validate } from "class-validator";
+import { IsEmail, Length, MaxLength } from "class-validator";
 import { Field, InputType } from "type-graphql";
 import { User } from '../../entity/User';
 
