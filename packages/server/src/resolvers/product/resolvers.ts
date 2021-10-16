@@ -1,4 +1,16 @@
-import { Arg, Args, FieldResolver, Float, Mutation, Query, registerEnumType, Resolver, ResolverInterface, Root } from "type-graphql";
+import {
+    Arg,
+    Args,
+    FieldResolver,
+    Float,
+    Int,
+    Mutation,
+    Query,
+    registerEnumType,
+    Resolver,
+    ResolverInterface,
+    Root
+} from "type-graphql";
 import Product, { Review } from "../../entity/Product";
 import { CreateProductInput } from "./inputs";
 import { PaginationArgs, Order } from '../inputs';
@@ -15,13 +27,13 @@ registerEnumType(ProductOrder, {
 })
 
 @Resolver(Product)
-class ProductResolver implements ResolverInterface<Product>{
+class ProductResolver implements ResolverInterface<Product> {
+
     @Query(() => Product)
-    async product(@Arg('id') id: number): Promise<Product | null> {
-        return await Product.findOne(id);
+    async product(@Arg('id', () => Int) id: number): Promise<Product | null> {
+        return Product.findOne(id);
     }
 
-    // Required functionality: pagination, filtering, sorting
     @Query(() => [Product])
     async products(
         @Args()
@@ -44,9 +56,9 @@ class ProductResolver implements ResolverInterface<Product>{
 
             case ProductOrder.Price:
                 queryBuilder
-                    .orderBy('price', direction)    
+                    .orderBy('price', direction)
                 break;
-        
+
             case ProductOrder.Rating:
                 queryBuilder
                     .addSelect('AVG(review.rating)', 'avg')
@@ -54,15 +66,15 @@ class ProductResolver implements ResolverInterface<Product>{
                     .orderBy('avg', direction)
                 break;
         }
-        
+
         if (take) {
             queryBuilder.take(take);
         }
-        
+
         if (skip) {
             queryBuilder.skip(skip);
         }
-        
+
         return queryBuilder
             .groupBy('product.id')
             .getRawMany();
@@ -76,7 +88,7 @@ class ProductResolver implements ResolverInterface<Product>{
     @Mutation(() => [Product])
     async createProducts(
         @Arg('data', () => [CreateProductInput])
-            data: CreateProductInput[]
+        data: CreateProductInput[]
     ): Promise<Product[]> {
         const promises = Product
             .create(data)
@@ -84,7 +96,7 @@ class ProductResolver implements ResolverInterface<Product>{
 
         return Promise.all(promises);
     }
-    
+
     @FieldResolver(() => Float)
     async averageRating(@Root() parent: Product): Promise<number> {
         const avg: number = await Review
@@ -94,7 +106,7 @@ class ProductResolver implements ResolverInterface<Product>{
                 product: parent
             })
             .getRawOne();
-        
+
         return avg ?? 0;
     }
 
@@ -103,11 +115,12 @@ class ProductResolver implements ResolverInterface<Product>{
         @Root() parent: Product
     ): Promise<Review[]> {
         return Review.find({
-            where: { 
+            where: {
                 product: parent
             }
         });
     }
+
 }
 
 export default ProductResolver;
