@@ -73,6 +73,7 @@ class UserResolver {
 
         return true;
     }
+
 }
 
 export default UserResolver;

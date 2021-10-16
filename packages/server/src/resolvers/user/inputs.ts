@@ -4,6 +4,7 @@ import { User } from '../../entity/User';
 
 @InputType()
 class CreateUserInput implements Partial<User> {
+
     @Field()
     @MaxLength(254)
     @IsEmail()
@@ -18,15 +19,18 @@ class CreateUserInput implements Partial<User> {
 
     @Field({ nullable: true })
     lastName?: string;
+
 }
 
 @InputType()
 class LoginInput implements Partial<User> {
+
     @Field()
     email: string;
 
     @Field()
     password: string;
+
 }
 
-export {CreateUserInput, LoginInput}
+export { CreateUserInput, LoginInput }
