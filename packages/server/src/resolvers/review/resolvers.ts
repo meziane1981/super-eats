@@ -1,4 +1,14 @@
-import { Arg, Ctx, FieldResolver, Mutation, Query, Resolver, ResolverInterface, Root } from 'type-graphql';
+import {
+    Arg,
+    Ctx,
+    FieldResolver,
+    Int,
+    Mutation,
+    Query,
+    Resolver,
+    ResolverInterface,
+    Root
+} from 'type-graphql';
 import AppContext from '../../@types/AppContext';
 import Product, { Review } from '../../entity/Product';
 import { User } from '../../entity/User';
@@ -6,19 +16,20 @@ import { CreateReviewInput } from './inputs';
 
 @Resolver(Review)
 class ReviewResolver implements ResolverInterface<Review> {
-    @Query(type => Review)
-    async review(@Arg('id') id: number): Promise<Review> {
+
+    @Query(() => Review)
+    async review(@Arg('id', () => Int) id: number): Promise<Review> {
         return Review.findOne(id);
     }
-    
-    @Query(type => [Review])
+
+    @Query(() => [Review])
     async reviews(): Promise<Review[]> {
         return Review.find();
     }
 
-    @Mutation(type => Review)
+    @Mutation(() => Review)
     async createReview(
-        @Arg('data') { rating, text, productID}: CreateReviewInput,
+        @Arg('data') { rating, text, productID }: CreateReviewInput,
         @Ctx() context: AppContext
     ): Promise<Review> {
         return Review.create({
@@ -29,11 +40,12 @@ class ReviewResolver implements ResolverInterface<Review> {
         }).save();
     }
 
-    @FieldResolver(type => User) 
+    @FieldResolver(() => User)
     async user(@Root() parent: Review): Promise<User> {
         const { user } = await Review.findOne(parent.id, { relations: ['user'] });
         return user;
     }
+
 }
 
 export default ReviewResolver;
