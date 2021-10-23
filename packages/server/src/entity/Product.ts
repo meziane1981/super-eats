@@ -36,6 +36,7 @@ registerEnumType(Categories, {
 @ObjectType()
 @Entity()
 class Product extends BaseEntity {
+
     @Field(() => ID)
     @PrimaryGeneratedColumn()
     id: number;
@@ -45,7 +46,7 @@ class Product extends BaseEntity {
     name: string;
 
     @Field({ nullable: true })
-    @Column({ length: 64, nullable: true})
+    @Column({ length: 64, nullable: true })
     description?: string;
 
     @Field(() => Float)
@@ -56,7 +57,7 @@ class Product extends BaseEntity {
     @Column({
         type: 'enum',
         enum: Categories,
-        default: Categories.None 
+        default: Categories.None
     })
     category: Categories;
 
@@ -78,11 +79,13 @@ class Product extends BaseEntity {
 
     @Field(() => Float)
     averageRating: number;
+
 }
 
 @ObjectType()
 @Entity()
 class Review extends BaseEntity {
+
     @Field(() => ID)
     @PrimaryGeneratedColumn()
     id: number;
@@ -102,6 +105,7 @@ class Review extends BaseEntity {
     @Field(() => Product)
     @ManyToOne(() => Product, product => product.reviews)
     product: Product;
+
 }
 
 export default Product;

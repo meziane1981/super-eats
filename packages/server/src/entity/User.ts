@@ -15,7 +15,8 @@ registerEnumType(UserRole, {
 @ObjectType()
 @Entity()
 class User extends BaseEntity {
-    @Field(type => ID)
+
+    @Field(() => ID)
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -40,10 +41,9 @@ class User extends BaseEntity {
     })
     lastName: string;
 
-    // It is possible that the default value here will always be the same
     @Column({
         type: 'timestamptz',
-        default: () => "CURRENT_TIMESTAMP"
+        default: () => 'CURRENT_TIMESTAMP'
     })
     registrationDate?: Date;
 
@@ -60,6 +60,7 @@ class User extends BaseEntity {
         default: UserRole.User,
     })
     role: UserRole;
+
 }
 
 export { UserRole, User };

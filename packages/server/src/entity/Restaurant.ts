@@ -6,14 +6,15 @@ import {
     OneToMany,
     OneToOne,
     PrimaryGeneratedColumn,
-} from "typeorm";
-import { Field, ID, Int, ObjectType } from "type-graphql";
-import Product from "./Product";
-import { User } from "./User";
+} from 'typeorm';
+import { Field, ID, Int, ObjectType } from 'type-graphql';
+import Product from './Product';
+import { User } from './User';
 
 @ObjectType()
 @Entity()
 class Restaurant extends BaseEntity {
+
     @Field(() => ID)
     @PrimaryGeneratedColumn()
     id: number;
@@ -32,6 +33,7 @@ class Restaurant extends BaseEntity {
     @OneToOne(() => User)
     @JoinColumn()
     user: User;
+
 }
 
 export default Restaurant;
