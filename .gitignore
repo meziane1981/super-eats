@@ -2,3 +2,5 @@ node_modules
 dist
 .env
 *.sql
+graphql-schema.json
+__generated__
