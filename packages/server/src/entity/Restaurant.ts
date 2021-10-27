@@ -30,7 +30,7 @@ class Restaurant extends BaseEntity {
     @OneToMany(() => Product, (product) => product.seller)
     products: Product[];
 
-    @OneToOne(() => User)
+    @OneToOne(() => User, { nullable: false })
     @JoinColumn()
     user: User;
 
