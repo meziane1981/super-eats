@@ -30,6 +30,14 @@ module.exports = {
                 ]
             },
             {
+                test: /\.(scss|sass)$/,
+                use: [
+                    "style-loader",
+                    "css-loader",
+                    "sass-loader"
+                ]
+            },
+            {
                 test: /\.html$/,
                 use: [
                     "html-loader"
@@ -39,7 +47,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebPackPlugin({
-            template: "src/index.html",
+            template: "public/index.html",
             filename: "index.html"
         }),
         new ESLintPlugin({
@@ -48,5 +56,12 @@ module.exports = {
             failOnError: true,
             failOnWarning: false
         })
-    ]
+    ],
+    devServer: {
+        static: {
+            directory: path.join(__dirname, "./public"),
+        },
+        compress: true,
+        port: 3000,
+    },
 }
